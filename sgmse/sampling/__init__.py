@@ -52,9 +52,11 @@ def get_pc_sampler(
     def pc_sampler():
         """The PC sampler function."""
         with torch.no_grad():
+            print('doing sampling')
             xt = sde.prior_sampling(y.shape, y).to(y.device)
             timesteps = torch.linspace(sde.T, eps, sde.N, device=y.device)
-            for i in range(sde.N):
+            for i in range(1):
+                print('timestep', i+1)
                 t = timesteps[i]
                 if i != len(timesteps) - 1:
                     stepsize = t - timesteps[i+1]

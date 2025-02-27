@@ -434,13 +434,15 @@ class ScoreModel(pl.LightningModule):
         T_orig = y.size(1) 
         norm_factor = y.abs().max().item()
         y = y / norm_factor
-        Y = torch.unsqueeze(self._forward_transform(self._stft(y.cuda())), 0)
+        #Y = torch.unsqueeze(self._forward_transform(self._stft(y.cuda())), 0)
+        Y = torch.unsqueeze(self._forward_transform(self._stft(y)), 0)
         Y = pad_spec(Y)
 
         # SGMSE sampling with OUVE SDE
         if self.sde.__class__.__name__ == 'OUVESDE':
             if self.sde.sampler_type == "pc":
-                sampler = self.get_pc_sampler(predictor, corrector, Y.cuda(), N=N, 
+                #sampler = self.get_pc_sampler(predictor, corrector, Y.cuda(), N=N, 
+                sampler = self.get_pc_sampler(predictor, corrector, Y, N=N, 
                     corrector_steps=corrector_steps, snr=snr, intermediate=False,
                     **kwargs)
             elif self.sde.sampler_type == "ode":
